@@ -10,7 +10,7 @@ import { clerkWebhook } from './controllers/webhook.js'
 
 
 // initialisation express 
-export const app = express()
+ const app = express()
 
 app.use(express.json())
 
