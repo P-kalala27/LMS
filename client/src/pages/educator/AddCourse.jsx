@@ -20,9 +20,9 @@ const AddCourse = () => {
     lectureTitle: "",
     lectureDuration: "",
     lectureUrl: "",
+    lectureFile: null,
     isPreviewFree: false,
     }
-
   )
 
   const handleChapter =  (action, chapterId) => {
@@ -87,6 +87,7 @@ const AddCourse = () => {
       lectureTitle: '',
       lectureDuration: '',
       lectureUrl: '',
+      lectureFile: null,
       isPreviewFree: false,
     })
   }
@@ -262,13 +263,46 @@ const AddCourse = () => {
                   </div>
 
                   <div className="mb-2">
-                    <p>Lecture URL</p>
+                    <p>Lecture URL (YouTube)</p>
                     <input type="text"
                     className="mt-1 block w-full border rounded py-1 px-2"
-                    value={lectureDetails.lectureUrl} 
-                    onChange={(e) => setLectureDetails({...lectureDetails,
-                    lectureUrl: e.target.value})}
+                    value={lectureDetails.lectureUrl}
+                    onChange={(e) => setLectureDetails({...lectureDetails, lectureUrl: e.target.value, lectureFile: null})}
+                    disabled={lectureDetails.lectureFile !== null}
+                    placeholder="Lien YouTube"
                     />
+                  </div>
+                  <div className="mb-2">
+                    <p>Ou uploader une vidéo (max 40 min)</p>
+                    <input
+                      type="file"
+                      accept="video/*"
+                      className="mt-1 block w-full border rounded py-1 px-2"
+                      onChange={async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return setLectureDetails({...lectureDetails, lectureFile: null});
+                        // Vérification de la durée de la vidéo
+                        const url = URL.createObjectURL(file);
+                        const video = document.createElement('video');
+                        video.preload = 'metadata';
+                        video.onloadedmetadata = function() {
+                          window.URL.revokeObjectURL(url);
+                          const duration = video.duration;
+                          if (duration > 40 * 60) {
+                            alert('La vidéo dépasse 40 minutes.');
+                            setLectureDetails({...lectureDetails, lectureFile: null});
+                            e.target.value = null;
+                          } else {
+                            setLectureDetails({...lectureDetails, lectureFile: file, lectureUrl: '' , lectureDuration: Math.round(duration/60)});
+                          }
+                        };
+                        video.src = url;
+                      }}
+                      disabled={lectureDetails.lectureUrl !== ''}
+                    />
+                    {lectureDetails.lectureFile && (
+                      <span className="text-green-600 text-xs">Vidéo sélectionnée : {lectureDetails.lectureFile.name}</span>
+                    )}
                   </div>
 
                   <div className="flex gap-2 my-4">

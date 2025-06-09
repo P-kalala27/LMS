@@ -13,6 +13,11 @@ import MyCourses from './pages/educator/MyCourses'
 import StudentsEnrollments from './pages/educator/StudentsEnrollments'
 import Navbar from './components/students/Navbar'
 import "quill/dist/quill.snow.css"
+import DashboardAdmin from './pages/admin/DashboardAdmin'
+import UsersAdmin from './pages/admin/UsersAdmin'
+import CoursesAdmin from './pages/admin/CoursesAdmin'
+import StatsAdmin from './pages/admin/StatsAdmin'
+import CategoriesAdmin from './pages/admin/CategoriesAdmin'
 
 const App = () => {
 
@@ -35,6 +40,14 @@ const App = () => {
           <Route path='add-course' element={<AddCourse />} />  
           <Route path='my-courses' element={<MyCourses />} />  
           <Route path='student-enrolled' element={<StudentsEnrollments />} />  
+        </Route>
+
+        {/* Routes admin */}
+        <Route path='/admin' element={<DashboardAdmin />}>
+          <Route path='users' element={<UsersAdmin />} />
+          <Route path='courses' element={<CoursesAdmin />} />
+          <Route path='stats' element={<StatsAdmin />} />
+          <Route path='categories' element={<CategoriesAdmin />} />
         </Route>
       </Routes>
     </div>

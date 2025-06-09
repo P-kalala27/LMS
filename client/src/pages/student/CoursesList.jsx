@@ -8,21 +8,27 @@ import Footer from '../../components/students/Footer'
 
 const CoursesList = () => {
 
-  const {navigate, allCourses} = useContext(AppContext)
+  const {navigate, allCourses, categories} = useContext(AppContext)
   const {input} = useParams()
   const [filteredCourses, setFilteredCourses] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState('')
 
   useEffect(() => {
     if(allCourses && allCourses.length > 0 ){
-      const tempCourse = allCourses.slice()
-      input ? setFilteredCourses(
-        tempCourse.filter(
+      let tempCourse = allCourses.slice()
+      if (input) {
+        tempCourse = tempCourse.filter(
           item => item.courseTitle.toLowerCase().includes(input.toLowerCase())
         )
-      )
-      : setFilteredCourses(tempCourse)
+      }
+      if (selectedCategory) {
+        tempCourse = tempCourse.filter(
+          item => item.category === selectedCategory
+        )
+      }
+      setFilteredCourses(tempCourse)
     }
-  }, [allCourses, input])
+  }, [allCourses, input, selectedCategory])
   return (
       <>
         <div className='relative md:px-36 px-8 pt-20 text-left'>
@@ -43,6 +49,23 @@ const CoursesList = () => {
               onClick={()=>navigate('/course-list')}/>
             </div>
           }
+          <div className='flex flex-wrap gap-2 mt-8'>
+            <button
+              className={`px-3 py-1 rounded border ${selectedCategory === '' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'}`}
+              onClick={() => setSelectedCategory('')}
+            >
+              Toutes les catégories
+            </button>
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                className={`px-3 py-1 rounded border ${selectedCategory === cat.name ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'}`}
+                onClick={() => setSelectedCategory(cat.name)}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </div>
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
           my-16 gap-3 px-2 md:p-0'>
             {

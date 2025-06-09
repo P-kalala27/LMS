@@ -15,6 +15,13 @@ export const AppContextProvider = (props) => {
     const [allCourses, setAllCourses] = useState([])
     const [isEducator,setIsEducator] = useState(true)
     const [enrolledCourses,setEnrolledCourses] = useState([])
+    const [categories, setCategories] = useState([
+        { id: 1, name: 'Développement' },
+        { id: 2, name: 'Design' },
+        { id: 3, name: 'Marketing' },
+        { id: 4, name: 'Cybersécurité' },
+        { id: 5, name: 'Python' },
+    ]);
 
     const calculateRating = (course) => {
         if(course.courseRatings.length === 0) return 0;
@@ -81,7 +88,8 @@ export const AppContextProvider = (props) => {
         currency, allCourses, navigate, calculateRating,
         isEducator, setIsEducator, calculateChapiterTime,
         calculateCourseDuration, calculateNoOfLecture, enrolledCourses,
-         fetchEnrolledCourses
+         fetchEnrolledCourses,
+         categories, setCategories
     }
     return (
         <AppContext.Provider value={value}>
